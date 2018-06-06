@@ -5,6 +5,7 @@ import logging
 from flask import (
     Flask,
     jsonify,
+    request,
 )
 from schematics import Model
 from schematics.types import (
@@ -111,7 +112,9 @@ def create_app(name):
     def add_cors_headers(response):
         response.headers['Access-Control-Allow-Origin'] = '*'
         response.headers['Access-Control-Allow-Methods'] = '*'
-        response.headers['Access-Control-Allow-Headers'] = '*'
+        if 'Access-Control-Request-Headers' in request.headers:
+            request_headers = request.headers['Access-Control-Request-Headers']
+            response.headers['Access-Control-Allow-Headers'] = request_headers
         return response
 
     return app
